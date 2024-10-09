@@ -3,7 +3,8 @@ using Elastic.Clients.Elasticsearch.QueryDsl;
 
 namespace ElasticSearchHelper
 {
-    public class ElasticSearchImplamentation<T> where T : class
+    public class ElasticSearchImplamentation<T>: IElasticSearchInterface<T>
+        where T : class,IBaseModel,new()
     {
         private readonly ElasticsearchClient _client;
         private readonly string _indexName;
@@ -17,16 +18,6 @@ namespace ElasticSearchHelper
             _indexName = indexName;
         }
 
-        //// Index a document (create or update)
-        //public async Task IndexDocumentAsync(T document, string id)
-        //{
-        //    var response = await _client.IndexDocumentAsync(document);
-        //    if (!response.IsValid)
-        //    {
-        //        throw new Exception($"Failed to index document: {response.OriginalException.Message}");
-        //    }
-        //}
-
         // Get a document by its ID
         public async Task<T> GetDocumentAsync(string id)
         {
@@ -37,11 +28,27 @@ namespace ElasticSearchHelper
             }
             return response.Source;
         }
+        public async Task<List<T>> GetAllAsync()
+        {
+            SearchResponse<T> searchResponse = await _client.SearchAsync<T>(s => s
+            .Index(_indexName)
+            //.Query(q => q.MatchAll())
+            .Size(1000));  
+
+            if (searchResponse.IsValidResponse)
+            {
+                return searchResponse.Documents.ToList();
+            }
+            else
+            {
+                return null;
+            }
+        }
 
         // Search documents based on a query
-        public async Task<IReadOnlyCollection<T>> SearchAsync(string searchTerm)
+        public async Task<List<T>> SearchAsync(string searchTerm)
         {
-            SearchRequest searchRequest = new("products")
+            SearchRequest searchRequest = new(_indexName)
             {
                 Size= 100,
                 Sort = new List<SortOptions>
@@ -53,22 +60,26 @@ namespace ElasticSearchHelper
             };
             var response = await _client.SearchAsync<T>(searchRequest);
 
-            return response.Documents;
+            return response.Documents.ToList();
         }
 
 
 
-        //// Update a document by ID
-        //public async Task UpdateDocumentAsync(string id, T document)
-        //{
-        //    var response = await _client.UpdateAsync<T>(id, u => u.Doc(document));
-            
-        //}
+        // Update a document by ID
+        public async Task<bool> UpdateDocumentAsync(BaseDTO request)
+        {
+            UpdateRequest<T, BaseDTO> updateRequest = new(_indexName, request.Id)
+            {Doc=request };
+            var response = await _client.UpdateAsync(updateRequest);
+            return response.IsSuccess()?true:false;
+
+        }
 
         // Delete a document by ID
         public async Task DeleteDocumentAsync(string id)
         {
-            var response = await _client.DeleteAsync<T>(id);
+            DeleteRequest<T> deleteRequest = new(_indexName, id);
+            var response = await _client.DeleteAsync(deleteRequest);
         }
 
         // Check if an index exists
@@ -78,7 +89,7 @@ namespace ElasticSearchHelper
             return response.Exists;
         }
 
-        public async Task CreateIndexwithIdAsync(T product)
+        public async Task<bool> CreateIndexwithIdAsync(T product)
         {
             var responseCreated = await _client.CreateAsync<T>(product);
             
@@ -87,6 +98,16 @@ namespace ElasticSearchHelper
                 throw new Exception($"Failed to create index:");
             }
 
+            else
+            {
+                return true;
+            }
+
+        }
+
+        public Task UpdateDocumentAsync(UpdateProductDTO request, T document)
+        {
+            throw new NotImplementedException();
         }
     }
 }

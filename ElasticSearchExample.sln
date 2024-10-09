@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElasticSearchHelper", "ElasticSearchHelper\ElasticSearchHelper.csproj", "{003FB9AC-3345-450F-863D-9C90441B4DAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElasticSearchHelper", "ElasticSearchHelper\ElasticSearchHelper.csproj", "{003FB9AC-3345-450F-863D-9C90441B4DAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{7775189B-3D5A-4289-BD78-4A91493CAE39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{7775189B-3D5A-4289-BD78-4A91493CAE39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{36F79ADF-AA99-4442-9665-0310D433F2B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{7775189B-3D5A-4289-BD78-4A91493CAE39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7775189B-3D5A-4289-BD78-4A91493CAE39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7775189B-3D5A-4289-BD78-4A91493CAE39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36F79ADF-AA99-4442-9665-0310D433F2B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36F79ADF-AA99-4442-9665-0310D433F2B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36F79ADF-AA99-4442-9665-0310D433F2B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36F79ADF-AA99-4442-9665-0310D433F2B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
